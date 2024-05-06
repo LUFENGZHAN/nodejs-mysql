@@ -13,6 +13,7 @@
   "dependencies": {
     "@escook/express-joi": "^1.1.1",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "fs": "^0.0.1-security",
@@ -20,6 +21,7 @@
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "uuid": "^9.0.1"
   }
 }
