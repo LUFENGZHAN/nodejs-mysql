@@ -1,17 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const config = require('./config');
+const CryptoJS = require('crypto-js');
 const cors = require('cors');
-const usersRouter = require('./router/user');
+const multer = require('multer');
+const usersRouter = require('./router/auth/user');
 // 注册全局中间件
 app.use(express.static('public'));
 app.use(cors());
+// multipart/form-data
+app.use(multer().any());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
 // parse application/json
 app.use(bodyParser.json())
-
+app.use((req,res,next)=>{
+    if (req.method === 'POST' && req.body.p_data) {
+        try {
+            req.body = JSON.parse(CryptoJS.AES.decrypt(req.body.p_data,config.jwtSecretKey ).toString(CryptoJS.enc.Utf8));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    next()
+})
 // 使用用户路由模块
 app.use('/auth', usersRouter);
 
