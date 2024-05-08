@@ -24,19 +24,19 @@ exports.getUserInfo = (req, res) => {
 		// 1. 执行 SQL 语句失败
 		if (err)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: err,
 			})
 		// 2. 执行 SQL 语句成功，但是查询到的数据条数不等于 1
 		if (results.length !== 1)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: '获取用户信息失败！',
 			})
 
 		// 3. 将用户信息响应给客户端
 		res.send({
-			status: 0,
+			code: 0,
 			msg: '获取用户基本信息成功！',
 			data: results[0],
 		})
@@ -50,19 +50,19 @@ exports.updateUserInfo = (req, res) => {
 		// 执行 SQL 语句失败
 		if (err)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: err,
 			})
 		// 执行 SQL 语句成功，但影响行数不为 1
 		if (results.affectedRows !== 1)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: '修改用户基本信息失败！',
 			})
 
 		// 修改用户信息成功
 		return res.send({
-			status: 0,
+			code: 0,
 			msg: '修改用户基本信息成功！',
 		})
 	})
@@ -78,14 +78,14 @@ exports.updatePassword = (req, res) => {
 		// 执行 SQL 语句失败
 		if (err)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: err,
 			})
 
 		// 检查指定 id 的用户是否存在
 		if (results.length !== 1)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: '用户不存在！',
 			})
 
@@ -98,7 +98,7 @@ exports.updatePassword = (req, res) => {
 		const compareResult = bcrypt.compareSync(req.body.oldPwd, results[0].password)
 		if (!compareResult)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: '原密码错误！',
 			})
 
@@ -113,20 +113,20 @@ exports.updatePassword = (req, res) => {
 			// SQL 语句执行失败
 			if (err)
 				return res.send({
-					status: 0,
+					code: 0,
 					msg: err,
 				})
 
 			// SQL 语句执行成功，但是影响行数不等于 1
 			if (results.affectedRows !== 1)
 				return res.send({
-					status: 1,
+					code: 1,
 					msg: '更新密码失败！',
 				})
 
 			// 更新密码成功
 			res.send({
-				status: 0,
+				code: 0,
 				msg: '更新密码成功！',
 			})
 		})
@@ -141,7 +141,7 @@ exports.updateAvatar = (req, res) => {
 	// 手动判断是否上传了头像
 	if (!file || file.fieldname !== 'avatar')
 		return res.send({
-			status: 0,
+			code: 0,
 			msg: '头像是必选参数！',
 		})
 	// Date.now() 返回自 1970 年 1 月 1 日 00:00:00 (UTC) 到当前时间的毫秒数。类型为 number,
@@ -166,19 +166,19 @@ exports.updateAvatar = (req, res) => {
 		// 执行 SQL 语句失败
 		if (err)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: err,
 			})
 
 		// 执行 SQL 语句成功，但是影响行数不等于 1
 		if (results.affectedRows !== 1)
 			return res.send({
-				status: 0,
+				code: 0,
 				msg: '更新头像失败！',
 			})
 		// 更新用户头像成功
 		res.send({
-			status: 0,
+			code: 0,
 			msg: '更新头像成功',
 			imgUrl: imgUrl,
 		})
