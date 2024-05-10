@@ -7,12 +7,13 @@ const router = express.Router()
 const userHandler = require('../../router_handler/auth/user')
 
 // 1. 导入验证表单数据的中间件(自动验证) npm i @escook/express-joi
-const expressJoi = require('@escook/express-joi')
+const expressJoi = require('../permission')
 
 // 2. 导入需要的验证规则对象
 const { reg_login_schema } = require('../../schema/auth/user')
 
 // 注册与登录
+router.post('/reguser', expressJoi(reg_login_schema), userHandler.regUser)
 router.post('/login', expressJoi(reg_login_schema), userHandler.login)
 router.use(function (err, req, res, next) {
 	res.json({
