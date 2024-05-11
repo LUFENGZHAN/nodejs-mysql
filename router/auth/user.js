@@ -7,19 +7,18 @@ const router = express.Router()
 const userHandler = require('../../router_handler/auth/user')
 
 // 1. 导入验证表单数据的中间件(自动验证) npm i @escook/express-joi
-const expressJoi = require('../permission')
+const expressJoi = require('@escook/express-joi')
 
 // 2. 导入需要的验证规则对象
 const { reg_login_schema } = require('../../schema/auth/user')
 
-// 注册与登录
-router.post('/reguser', expressJoi(reg_login_schema), userHandler.regUser)
+// 登录
 router.post('/login', expressJoi(reg_login_schema), userHandler.login)
 router.use(function (err, req, res, next) {
 	res.json({
 		code: 1,
-        data: null,
-		message: err.message,
+        data: err.message,
+		message: '登录失败!',
 	})
 })
 // 将路由对象共享出去
