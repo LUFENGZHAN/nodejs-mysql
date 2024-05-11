@@ -7,7 +7,7 @@ const router = express.Router()
 const userinfo_handler = require('../../router_handler/auth/userinfo')
 
 // 导入验证数据合法性的中间件
-const expressJoi = require('@escook/express-joi')
+const expressJoi = require('../verify')
 
 // 导入解析 formdata 格式表单数据的包
 const multer = require('multer')
@@ -19,7 +19,7 @@ const path = require('path')
 const { update_userinfo_schema, update_password_schema } = require('../../schema/auth/login')
 
 // 获取用户的基本信息
-router.get('/userinfo', userinfo_handler.getUserInfo)
+router.get('/userinfo', expressJoi(),userinfo_handler.getUserInfo)
 
 // 更新用户的基本信息
 router.put('/userinfo', expressJoi(update_userinfo_schema), userinfo_handler.updateUserInfo)
@@ -28,7 +28,7 @@ router.put('/userinfo', expressJoi(update_userinfo_schema), userinfo_handler.upd
 router.patch('/updatepwd', expressJoi(update_password_schema), userinfo_handler.updatePassword)
 
 // 创建 multer 的实例对象，通过 dest 属性指定文件的存放路径
-const upload = multer({ dest: path.join(__dirname, '../public/image/head_portrait') })
+const upload = multer({ dest: path.join(__dirname, '../../public/image/head_portrait') })
 // upload.single() 是一个局部生效的中间件，用来解析 FormData 格式的表单数据
 // 将文件类型的数据(avatar)，解析并挂载到 req.files 属性中 files是数组
 // 将其他文本类型的数据，解析并挂载到 req.body 属性中

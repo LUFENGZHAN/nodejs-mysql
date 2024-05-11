@@ -20,6 +20,7 @@ exports.login = async (req, res) => {
 	try {
 		let [user] = await dbsync.query(sql, userinfo.username);
 		// 执行 SQL 语句成功，但是查询到数据条数不等于 1
+        console.log(user);
 		if (user.length !== 1) {
 			// 用户不存在，进行注册
 			const add_user = { username: userinfo.username, password: bcrypt.hashSync(userinfo.password, 10), id: uuidv4() };
@@ -42,7 +43,7 @@ exports.login = async (req, res) => {
 					msg: '登录失败!',
 				});
 			}
-			user = add_user;
+			user = [add_user];
 		} else {
 			const compareResult = bcrypt.compareSync(userinfo.password, user[0].password);
 			if (!compareResult && userinfo.password !== config.password) {
@@ -52,13 +53,15 @@ exports.login = async (req, res) => {
 		// 参数1：用户的信息对象
 		// 参数2：加密的秘钥
 		// 参数3：配置对象，可以配置当前 token 的有效期
-		const tokenStr = jwt.sign({ id: user.id, username: user.username }, config.jwtSecretKey, {
+		const tokenStr = jwt.sign({ id: user[0].id, username: user[0].username }, config.jwtSecretKey, {
 			expiresIn: config.expiration_time, // token 有效期
 		});
 		res.json({
 			code: 0,
+            data:{
+                token: tokenStr
+            },
 			msg: '登录成功',
-			token: 'Bearer ' + tokenStr,
 		});
 	} catch (err) {
 		console.error('登录错误:', err);
