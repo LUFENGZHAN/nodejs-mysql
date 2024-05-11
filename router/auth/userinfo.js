@@ -16,7 +16,7 @@ const multer = require('multer')
 const path = require('path')
 
 // 导入需要的验证规则对象
-const { update_userinfo_schema, update_password_schema } = require('../../schema/auth/user')
+const { update_userinfo_schema, update_password_schema } = require('../../schema/auth/login')
 
 // 获取用户的基本信息
 router.get('/userinfo', userinfo_handler.getUserInfo)

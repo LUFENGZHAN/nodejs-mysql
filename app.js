@@ -5,7 +5,8 @@ const config = require('./config');
 const CryptoJS = require('crypto-js');
 const cors = require('cors');
 const multer = require('multer');
-const usersRouter = require('./router/auth/user');
+const usersRouter = require('./router/auth/login');
+const userinfoRouter = require('./router/auth/userinfo');
 // 注册全局中间件
 app.use(express.static('public'));
 app.use(cors());
@@ -27,6 +28,7 @@ app.use((req,res,next)=>{
 })
 // 使用用户路由模块
 app.use('/auth', usersRouter);
+app.use('/user', userinfoRouter);
 
 // 启动服务器
 app.listen(3007, '0.0.0.0',function () {
