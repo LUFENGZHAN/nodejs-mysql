@@ -13,12 +13,7 @@ const { reg_login_schema } = require('../../schema/auth/user')
 
 // 登录
 router.post('/login', expressJoi(reg_login_schema), userHandler.login)
-router.use(function (err, req, res, next) {
-	res.json({
-		code: 1,
-        data: err.message,
-		message: '登录失败!',
-	})
-})
+router.patch('/updatepwd', expressJoi(reg_login_schema), userHandler.updatePassword)
+
 // 将路由对象共享出去
 module.exports = router
