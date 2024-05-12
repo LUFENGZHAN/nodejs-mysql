@@ -16,13 +16,13 @@ const multer = require('multer')
 const path = require('path')
 
 // 导入需要的验证规则对象
-const { update_userinfo_schema, update_password_schema } = require('../../schema/auth/login')
+const { update_userinfo_schema, update_password_schema } = require('../../schema/auth/user')
 
 // 获取用户的基本信息
-router.get('/userinfo', expressJoi(),userinfo_handler.getUserInfo)
+router.get('/userinfo/get', expressJoi(),userinfo_handler.getUserInfo)
 
 // 更新用户的基本信息
-router.put('/userinfo', expressJoi(update_userinfo_schema), userinfo_handler.updateUserInfo)
+router.put('/userinfo/update', expressJoi(update_userinfo_schema), userinfo_handler.updateUserInfo)
 
 // 重置密码的路由
 router.patch('/updatepwd', expressJoi(update_password_schema), userinfo_handler.updatePassword)

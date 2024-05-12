@@ -6,11 +6,10 @@ const router = express.Router()
 // 导入用户路由处理函数模块
 const userHandler = require('../../router_handler/auth/login')
 
-// 1. 导入验证表单数据的中间件(自动验证) npm i @escook/express-joi
-const expressJoi = require('@escook/express-joi')
+const expressJoi = require('../verify')
 
 // 2. 导入需要的验证规则对象
-const { reg_login_schema } = require('../../schema/auth/login')
+const { reg_login_schema } = require('../../schema/auth/user')
 
 // 登录
 router.post('/login', expressJoi(reg_login_schema), userHandler.login)

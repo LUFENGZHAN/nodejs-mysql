@@ -18,30 +18,30 @@ exports.getUserInfo = async (req, res) => {
 	// 根据用户的 id，查询用户的基本信息
 	const sql = `select * from user_info where user_id=?`;
 	try {
-		const [results] = await dbsync.query(sql, req.user.id);
+		const [[results]] = await dbsync.query(sql, req.user.id);
 		// 将用户的基本信息响应给客户端
 		res.send({
 			code: 0,
-			data: {
-				...results[0],
-				create_time: results[0].create_time.toLocaleDateString(),
-			},
+			data: results,
 			msg: '获取用户基本信息成功！',
 		});
 	} catch (error) {
+		console.error('错误信息:', error);
 		res.json({
 			code: 1,
 			data: error,
 			msg: '获取用户基本信息失败！',
 		});
+	} finally {
+         // 关闭数据库连接
 	}
 };
 
 // 更新用户基本信息的处理函数
-exports.updateUserInfo = (req, res) => {
+exports.updateUserInfo = async (req, res) => {
 	const sql = `update user_info set ? where id=?`;
 	try {
-		const [results] = db.query(sql, [req.body, req.body.id]);
+		const [results] = await dbsync.query(sql, [req.body, req.body.id]);
 		if (results.affectedRows !== 1)
 			return res.send({
 				code: 0,

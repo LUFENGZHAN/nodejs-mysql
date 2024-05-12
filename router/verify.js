@@ -16,7 +16,7 @@ const expressJoi = function (schemas, options = { strict: false }) {
 	delete options.strict;
 
 	// TODO: 用户指定了什么 schema，就应该校验什么样的数据
-	return function (req, res, next) {
+	return async function (req, res, next) {
 		if (schemas) {
 			['body', 'query', 'params'].forEach(key => {
 				// 如果当前循环的这一项 schema 没有提供，则不执行对应的校验

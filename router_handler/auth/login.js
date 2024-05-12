@@ -20,7 +20,6 @@ exports.login = async (req, res) => {
 	try {
 		let [user] = await dbsync.query(sql, userinfo.username);
 		// 执行 SQL 语句成功，但是查询到数据条数不等于 1
-        console.log(user);
 		if (user.length !== 1) {
 			// 用户不存在，进行注册
 			const add_user = { username: userinfo.username, password: bcrypt.hashSync(userinfo.password, 10), id: uuidv4() };
@@ -64,7 +63,7 @@ exports.login = async (req, res) => {
 			msg: '登录成功',
 		});
 	} catch (err) {
-		console.error('登录错误:', err);
+		console.error('错误信息:', err);
 		res.json({ code: 1, data: err, msg: '登录失败' });
 	}
 };

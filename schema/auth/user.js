@@ -34,17 +34,17 @@ exports.reg_login_schema = {
 	},
 }
 
-// 定义 id, nickname, emial 的验证规则
+// 定义 id 的验证规则
 const id = joi.number().integer().min(36).required()
-const nickname = joi.string().required()
-const email = joi.string().email().required()
+const avatar = joi.string().allow('').required()
+const sex = joi.number().required()
 
 // 验证规则对象 - 更新用户基本信息
 exports.update_userinfo_schema = {
 	body: {
 		id,
-		nickname,
-		email,
+        avatar,
+        sex
 	},
 }
 
