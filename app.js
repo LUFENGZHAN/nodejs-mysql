@@ -4,14 +4,14 @@ const app = express();
 const config = require('./config');
 const CryptoJS = require('crypto-js');
 const cors = require('cors');
-const multer = require('multer');
+const path = require('path');
 const usersRouter = require('./router/auth/login');
-const userinfoRouter = require('./router/auth/userinfo');
+const userinfoRouter = require('./router/system/userinfo');
+const fileRouter = require('./router/upload/file');
 // 注册全局中间件
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 // multipart/form-data
-app.use(multer().any());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -28,7 +28,8 @@ app.use((req, res, next) => {
 });
 // 使用用户路由模块
 app.use('/auth', usersRouter);
-app.use('/user', userinfoRouter);
+app.use('/file', fileRouter);
+app.use('/system', userinfoRouter);
 app.use(function (err, req, res, next) {
 	res.json({
 		code: 1,

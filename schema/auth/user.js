@@ -1,5 +1,3 @@
-// 用户信息验证模块
-
 // 使用第三方的中间件验证表单数据
 const joi = require('joi')
 
@@ -34,26 +32,11 @@ exports.reg_login_schema = {
 	},
 }
 
-// 定义 id 的验证规则
-const id = joi.string().min(36).required()
-const avatar = joi.string().allow('').required()
-const sex = joi.number().required()
-const name = joi.string().required()
 
-// 验证规则对象 - 更新用户基本信息
-exports.update_userinfo_schema = {
-	body: {
-		id,
-        avatar,
-        sex,
-        name
-	},
-}
 
 // 验证规则对象 - 重置密码
 exports.update_password_schema = {
 	body: {
-		// 使用 password 这个规则，验证 req.body.oldPwd 的值
 		oldPwd: password,
 		// 使用 joi.not(joi.ref('oldPwd')).concat(password) 规则，验证 req.body.newPwd 的值
 		// 解读：
@@ -63,16 +46,3 @@ exports.update_password_schema = {
 		newPwd: joi.not(joi.ref('oldPwd')).concat(password),
 	},
 }
-
-// 头像的验证规则就不需要了，因为在router/userinfo内使用 multer 来解析数据自带验证
-// 头像图片的验证规则
-// dataUri() 指的是如下格式的字符串数据：
-// data:image/png;base64,VE9PTUFOWVNFQ1JFVFM=
-// const avatar = joi.string().dataUri().required()
-
-// 验证规则对象 - 更新头像
-// exports.update_avatar_schema = {
-//   body: {
-//     avatar,
-//   },
-// }

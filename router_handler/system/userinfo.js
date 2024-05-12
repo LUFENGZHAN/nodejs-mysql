@@ -11,13 +11,13 @@ exports.getUserInfo = async (req, res) => {
 		res.send({
 			code: 0,
 			data: results,
-			msg: '获取用户基本信息成功！',
+			msg: '获取成功!',
 		});
 	} catch (error) {
 		res.json({
 			code: 1,
 			data: error,
-			msg: '获取用户基本信息失败！',
+			msg: '获取失败！',
 		});
 	}
 };
@@ -42,7 +42,7 @@ exports.updateUserInfo = async (req, res) => {
 		res.json({
 			code: 1,
 			data: error,
-			msg: '更新用户基本信息失败！',
+			msg: '更新失败！',
 		});
 	}
 };

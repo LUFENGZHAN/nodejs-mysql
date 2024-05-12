@@ -53,7 +53,6 @@ const expressJoi = function (schemas, options = { strict: false }) {
 				next(); // 继续执行下一个中间件或路由处理程序
 			});
 		} catch (error) {
-			console.log('error', error);
 			next(error);
 		}
 	};

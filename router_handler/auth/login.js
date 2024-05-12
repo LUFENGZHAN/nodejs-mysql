@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
 // 重置密码的处理函数
 exports.updatePassword = async (req, res) => {
 	// 定义根据 id 查询用户数据的 SQL 语句
-	const sql = `select * from user where id=?`;
+	const sql = `select password from user where id=?`;
 	try {
 		const [results] = await dbsync.query(sql, req.user.id);
 		if (results.length !== 1)
@@ -86,10 +86,8 @@ exports.updatePassword = async (req, res) => {
 				data: null,
 				msg: '原密码错误！',
 			});
-
-		// 对新密码进行 bcrypt 加密之后，更新到数据库中：
 		// 定义更新用户密码的 SQL 语句
-		const sql_user = `update user_info set password=? where id=?`;
+		const sql_user = `update user set password=? where id=?`;
 
 		// 对新密码进行 bcrypt 加密处理
 		const newPwd = bcrypt.hashSync(req.body.newPwd, 10);
