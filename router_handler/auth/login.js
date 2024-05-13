@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
 	// 1.接收表单数据：
 	const userinfo = req.body;
 	// 2.定义 SQL 语句
-	const sql = `SELECT * FROM user WHERE username=?`;
+	const sql = `SELECT * FROM users WHERE username=?`;
 	// 3.执行 SQL 语句，查询用户的数据：
 	try {
 		let [user] = await dbsync.query(sql, userinfo.username);
@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
 				avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
 				create_time: new Date().toLocaleDateString(),
 			};
-			const sql_user = `insert into user set ?`;
+			const sql_user = `insert into users set ?`;
 			const sql_user_info = `insert into user_info set ?`;
 			const [[add], [user_rows]] = await Promise.all([dbsync.query(sql_user, add_user), dbsync.query(sql_user_info, user_info)]);
 			// SQL 语句执行成功，但影响的行数不为 1
@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
 // 重置密码的处理函数
 exports.updatePassword = async (req, res) => {
 	// 定义根据 id 查询用户数据的 SQL 语句
-	const sql = `select password from user where id=?`;
+	const sql = `select password from users where id=?`;
 	try {
 		const [results] = await dbsync.query(sql, req.user.id);
 		if (results.length !== 1)
@@ -87,7 +87,7 @@ exports.updatePassword = async (req, res) => {
 				msg: '原密码错误！',
 			});
 		// 定义更新用户密码的 SQL 语句
-		const sql_user = `update user set password=? where id=?`;
+		const sql_user = `update users set password=? where id=?`;
 
 		// 对新密码进行 bcrypt 加密处理
 		const newPwd = bcrypt.hashSync(req.body.newPwd, 10);
