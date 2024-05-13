@@ -39,12 +39,5 @@ router.post('/upload', expressjoi(verifyVlaue), (req, res) => {
 		});
 	}
 });
-// upload.single() 是一个局部生效的中间件，用来解析 FormData 格式的表单数据
-// 将文件类型的数据(avatar)，解析并挂载到 req.files 属性中 files是数组
-// 将其他文本类型的数据，解析并挂载到 req.body 属性中
-// array 有两个参数 表单name属性值(前端的文件对象名要和这里的相同) 最多上传文件的个数
-// 或
-// 将文件类型的数据，解析并挂载到 req.file 属性中 file是对象
-// 将其他文本类型的数据，解析并挂载到 req.body 属性中
-// router.post('/update/avatar', upload.single('avatar'), userinfo_handler.updateAvatar)
+
 module.exports = router;
