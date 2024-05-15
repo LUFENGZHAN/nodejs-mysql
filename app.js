@@ -31,7 +31,6 @@ app.use(function (err, req, res, next) {
 		message: '系统错误',
 	});
 });
-
 // 启动服务器
 app.listen(config.port, '0.0.0.0', function () {
 	console.log(`api server running at http://127.0.0.1:${config.port}`);

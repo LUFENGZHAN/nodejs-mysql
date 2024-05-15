@@ -1,5 +1,9 @@
 module.exports = {
     /**
+     *  设置服务器端口号
+     */
+    networkIp: 'http://192.168.31.120',
+    /**
      *  设置 token 加密的密钥
      */
     jwtSecretKey: 'itheimaNo1.^_^',
