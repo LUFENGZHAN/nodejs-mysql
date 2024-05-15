@@ -1,7 +1,28 @@
 module.exports = {
-    jwtSecretKey: 'itheimaNo1.^_^', // 加密字符串
-    expiration_time: '10h', // token 有效期为 10 个小时
-    password:'xz123456'
+    /**
+     *  设置 token 加密的密钥
+     */
+    jwtSecretKey: 'itheimaNo1.^_^',
+    /**
+     *  设置 token 的有效时间
+     */
+    expiration_time: '10h',
+    /**
+     *  设置服务器端口号
+     */
+    port:3007,
+    /**
+     *  是否检验token
+     */
+    is_verify:true,
+    /**
+     *  通用密码
+     */
+    password:'xz123456',
+    /**
+     *  排除不需要验证的接口
+     */
+    exemption:['/auth/login']
 }
 /**
  *  使用第三方的中间件验证表单数据  https://joi.dev/api/?v=17.13.0
