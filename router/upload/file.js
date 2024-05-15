@@ -24,8 +24,7 @@ router.post('/upload', expressjoi(verifyVlaue), (req, res) => {
 	if (!fs.existsSync(filePath)) {
 		fs.mkdirSync(filePath);
 	}
-	const ip = `${config.networkIp}:${config.port}/${req.body.type}`;
-
+	const url = `${config.networkIp}:${config.port}/${req.body.type}/`;
 	const files = req.files.map(item => {
 		const writePath = path.join(filePath, item.originalname);
 		fs.writeFileSync(writePath, item.buffer);
@@ -33,7 +32,7 @@ router.post('/upload', expressjoi(verifyVlaue), (req, res) => {
 			id: uuidv4(),
 			originalname: item.originalname,
 			mimetype: item.mimetype,
-			url: ip + '/' + item.originalname,
+			url: url  + item.originalname,
 		};
 	});
 	console.log(files);
