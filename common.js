@@ -1,13 +1,10 @@
 const jwt = require('jsonwebtoken');
 const config = require('./config');
 const CryptoJS = require('crypto-js');
-exports.verifytoken = function (is_verify) {
+exports.verifytoken = function () {
 	return (req, res, next) => {
 		try {
-            if (!is_verify) return next();
-			if (config.exemption.includes(req.path)) {
-				return next();
-			}
+			if (!config.is_verify) return next();
 			// 从请求头中获取 token
 			const token = req.headers['authorization'];
 			// 检查 token 是否存在
