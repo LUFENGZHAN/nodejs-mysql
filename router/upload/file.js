@@ -59,6 +59,9 @@ router.post('/upload', verifytoken(), expressjoi(verifyVlaue), async (req, res) 
 					data: error,
 					message: '上传失败',
 				};
+                files.forEach(file => {
+                    fs.unlinkSync(path.join(filePath, file.url.split('/').pop()));
+                })
 				res.json(responseData);
 			});
 	} catch (error) {
