@@ -5,8 +5,8 @@ const db = mysql.createPool({
 	host: 'localhost',
 	user: 'root', // 本地
 	// user: 'my_db_01', // 线上
-	password: '320332369',
-	database: 'mysql_node',
+	password: '111111',
+	database: 'my_db_01',
 });
 // 检测 mysql 模块能否正常工作
 // 调用 db.query() 函数，指定要执行的 SQL 语句，通过回调函数拿到执行的结果：
