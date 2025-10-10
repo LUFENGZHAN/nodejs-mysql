@@ -59,8 +59,7 @@ exports.login = async (req, res) => {
         res.json({
             code: 0,
             data: {
-                // token: tokenStr,
-                sessionID: req.sessionID,
+                sessionID: user.id,
             },
             msg: '登录成功',
         });
@@ -71,15 +70,45 @@ exports.login = async (req, res) => {
 
 // 退出登录
 exports.logout = (req, res) => {
-  req.session.destroy(() => {
-    res.json({ code: 0, msg: '退出成功' });
-  });
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.json({ code: 0, msg: '退出成功' });
+    });
 };
 
 // 获取当前登录信息
-exports.profile = (req, res) => {
-  if (!req.session.user) return res.json({ code: 1, msg: '未登录' });
-  res.json({ code: 0, msg: 'ok', data: req.session.user });
+exports.profile = async (req, res) => {
+    const { id, account } = req.session.user;
+    const sql = `
+      SELECT 
+        u.id,
+        u.account,
+        i.name,
+        i.avatar,
+        i.sex,
+        i.role,
+        i.email,
+        i.status,
+        i.create_time AS info_create_time,
+        i.update_time AS info_update_time
+      FROM users u
+      LEFT JOIN user_info i ON u.id = i.user_id
+      WHERE u.id = ?
+    `;
+    const [rows] = await dbsync.query(sql, [id]);
+    if (!rows || rows.length === 0) {
+        return res.status(404).json({
+            code: 404,
+            msg: '用户信息不存在',
+            data: null,
+        });
+    }
+
+    res.json({
+        code: 0,
+        msg: 'ok',
+        data: rows[0],
+    });
 };
 
 

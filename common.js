@@ -9,12 +9,7 @@ exports.verifytoken = function () {
                 req.body = JSON.parse(CryptoJS.AES.decrypt(req.body.p_data, config.jwtSecretKey).toString(CryptoJS.enc.Utf8));
             }
             if (config.checkToken.includes(req.path)) return next();
-            // 从请求头中获取 token
-            const token = req.headers['authorization'];
-            // 检查 token 是否存在
-            if (!token) {
-                return res.status(401).json({ code: 401, error: '信息认证失败' });
-            }
+
             // 判断 session 中是否存在用户信息
             if (req.session && req.session.user) {
                 // 登录状态有效，将用户信息挂载到 req.user

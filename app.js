@@ -16,7 +16,10 @@ const onlineRouter = require('./routes/online'); // 引入在线用户路由
 // 静态资源
 app.use(express.static(path.join(__dirname, 'public')));
 // 跨域
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:1111',
+    credentials: true
+}));
 // multipart/form-data
 app.use(multer().any());
 // parse application/x-www-form-urlencoded
@@ -32,7 +35,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 天
+      maxAge: 1000 * 60 * 60 * 12, // 1 天
       httpOnly: true,
     },
   })
@@ -47,7 +50,7 @@ app.use(function (err, req, res, next) {
 	res.status(500).json({
 		code: 1,
 		data: err.message,
-		message: '系统错误',
+		message: '服务器错误',
 	});
 });
 process.env.NODE_ENV =1223

@@ -33,7 +33,7 @@ router.get('/list', async (req, res) => {
                 }
             })
             .filter(u => u); // 过滤掉空值
-        res.json({ code: 0, data: { users, count: users.length } });
+        res.json({ code: 0, data: { list:users, total: users.length } });
     } catch (err) {
         console.error(err);
         res.status(500).json({ code: 1, msg: '查询失败', error: err });
