@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 // 导入验证数据合法性的中间件
 const expressjoi = require('@escook/express-joi')
-const { verifytoken } = require('../../common')
 
 // 导入用户信息的处理函数模块
 const userinfo_handler = require('../../router_handler/system/userinfo')
@@ -11,9 +10,9 @@ const userinfo_handler = require('../../router_handler/system/userinfo')
 const { update_userinfo_schema } = require('../../schema/system/system')
 
 // 获取用户的基本信息
-router.get('/user/userinfo/get',verifytoken(),userinfo_handler.getUserInfo)
+router.get('/user/userinfo/get',userinfo_handler.getUserInfo)
 
 // 更新用户的基本信息
-router.put('/user/userinfo/update', verifytoken(),expressjoi(update_userinfo_schema), userinfo_handler.updateUserInfo)
+router.put('/user/userinfo/update', expressjoi(update_userinfo_schema), userinfo_handler.updateUserInfo)
 
 module.exports = router

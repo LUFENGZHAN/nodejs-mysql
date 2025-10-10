@@ -5,11 +5,14 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const { verifytoken } = require('./common');
-const usersRouter = require('./router/auth/login');
-const userinfoRouter = require('./router/system/userinfo');
-const fileRouter = require('./router/upload/file');
 const config = require('./config');
+const session = require('express-session');
+const { redisStore } = require('./db/redisStore');
 
+const usersRouter = require('./routes/auth/login');
+const userinfoRouter = require('./routes/system/userinfo');
+const fileRouter = require('./routes/upload/file');
+const onlineRouter = require('./routes/online'); // 引入在线用户路由
 // 静态资源
 app.use(express.static(path.join(__dirname, 'public')));
 // 跨域
@@ -20,10 +23,26 @@ app.use(multer().any());
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
+
+// 配置 session 中间件
+app.use(
+  session({
+    store: redisStore,
+    secret: config.sessionSecret, // 从配置中读取
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 天
+      httpOnly: true,
+    },
+  })
+);
+
 // 使用用户路由模块
-app.use('/auth', usersRouter);
-app.use('/file', fileRouter);
-app.use('/system', userinfoRouter);
+app.use('/online',verifytoken(), onlineRouter);
+app.use('/auth', verifytoken(),usersRouter);
+app.use('/file',verifytoken(), fileRouter);
+app.use('/system', verifytoken(),userinfoRouter);
 app.use(function (err, req, res, next) {
 	res.status(500).json({
 		code: 1,

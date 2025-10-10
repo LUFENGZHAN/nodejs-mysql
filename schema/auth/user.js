@@ -14,20 +14,20 @@ const joi = require('joi')
  */
 
 // 用户名的验证规则
-const username = joi.string().alphanum().min(6).max(16).required()
+const account = joi.string().alphanum().min(6).max(16).required()
 
 // 密码的验证规则   6~12位  [\S]表示，非空白就匹配  [\s] 只要出现空白就匹配
 // /^[a-z0-9_-]{6,16}$/ = 以非空白的元素开头和结尾数量6-16
 const password = joi
 	.string()
-	.pattern(/^[a-z0-9_-]{6,16}$/)
+	.pattern(/^[a-z0-9_-]{6,16}/)
 	.required()
 
 // 登录表单的验证规则对象
 exports.reg_login_schema = {
 	// 表示需要对 req.body 中的数据进行验证
 	body: {
-		username,
+		account,
 		password,
 	},
 }
