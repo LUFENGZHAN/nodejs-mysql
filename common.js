@@ -1,8 +1,10 @@
 
 const config = require('./config');
 const CryptoJS = require('crypto-js');
+const { putOnlineUser } = require('./db/redisStore');
+
 exports.verifytoken = function () {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         try {
             // 解码请求体中的数据
             if (req.method === 'POST' && req.body && req.body.p_data) {
@@ -14,6 +16,7 @@ exports.verifytoken = function () {
             if (req.session && req.session.user) {
                 // 登录状态有效，将用户信息挂载到 req.user
                 req.user = req.session.user;
+                await putOnlineUser(req)
                 return next();
             }
 

@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 // 导入对密码进行加密处理的第三方中间件  npm i bcryptjs@2.4.3
 const bcrypt = require('bcryptjs');
 
-// 用这个包来生成 Token 字符串
+const { redisClient } = require('../../db/redisStore');
 
 // 导入配置文件
 const config = require('../../config.js');
@@ -55,7 +55,8 @@ exports.login = async (req, res) => {
             id: user.id,
             account: user.account,
             loginTime: new Date(),
-        }; // 将用户信息存储到 session 中
+        };
+        await putOnlineUser(req)
         res.json({
             code: 0,
             data: {
@@ -69,11 +70,22 @@ exports.login = async (req, res) => {
 };
 
 // 退出登录
-exports.logout = (req, res) => {
-    req.session.destroy(() => {
-        res.clearCookie('connect.sid');
-        res.json({ code: 0, msg: '退出成功' });
-    });
+exports.logout = async (req, res) => {
+    try {
+        if (req.session?.user) {
+            // 删除 Redis 在线状态
+            const onlineKey = `online_user:${req.session.user.id}`;
+            await redisClient.del(onlineKey);
+        }
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.json({ code: 0, msg: '退出成功' });
+        });
+    } catch (error) {
+        console.error('退出接口异常:', err);
+        res.status(500).json({ code: 1, msg: '服务器错误' });
+    }
+
 };
 
 // 获取当前登录信息

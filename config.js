@@ -26,6 +26,10 @@ module.exports = {
     /**
      *  是否检验token
      */
+    /**
+     *  在线用户过期时间，单位秒
+     */
+    ONLINE_TTL: 30,
     checkToken: ['/login'],
     /**
      *  通用密码
