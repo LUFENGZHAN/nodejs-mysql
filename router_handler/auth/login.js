@@ -97,6 +97,7 @@ exports.profile = async (req, res) => {
         u.account,
         i.name,
         i.avatar,
+        i.introduction,
         i.sex,
         i.role,
         i.email,

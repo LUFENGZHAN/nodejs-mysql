@@ -8,7 +8,6 @@ const redisClient = redisStore.client;
 
 // 在线状态 TTL，单位秒
 router.post('/heartbeat', async (req, res) => {
-    await putOnlineUser(req)
     return res.json({ code: 0, msg: '心跳保持成功' });
 })
 
