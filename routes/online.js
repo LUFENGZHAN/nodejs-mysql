@@ -17,7 +17,7 @@ router.get('/list', async (req, res) => {
     try {
         const users = await putOnlineUser(req, true); // 获取在线用户列表
 
-        res.json({ code: 0, data: { list: users, total: users.length } });
+        res.json({ code: 0, data:users });
     } catch (err) {
         console.error(err);
         res.status(500).json({ code: 1, msg: '查询失败', error: err });
