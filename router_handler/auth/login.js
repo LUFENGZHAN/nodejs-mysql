@@ -29,7 +29,7 @@ exports.login = async (req, res) => {
                 id: uuidv4(),
                 name: '用户' + Math.random().toString().slice(3, 6),
                 sex: 0,
-                avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                avatar:`${config.networkIp}:${config.port}/image/avatar.png`,
                 create_time: new Date().toLocaleDateString(),
             };
             const sql_user = `insert into users set ?`;
