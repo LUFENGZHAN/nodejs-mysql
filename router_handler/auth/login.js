@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 // 导入对密码进行加密处理的第三方中间件  npm i bcryptjs@2.4.3
 const bcrypt = require('bcryptjs');
 
-const { redisClient } = require('../../db/redisStore');
+const { redisClient,putOnlineUser } = require('../../db/redisStore');
 
 // 导入配置文件
 const config = require('../../config.js');
