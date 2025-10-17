@@ -12,37 +12,53 @@ const joi = require('joi')
  * number()值必须是一个数字
  * email()值必须是邮箱格式
  */
-
+const commonMessages = {
+    'string.base': '{#label} 必须是字符串',
+    'string.empty': '{#label} 不能为空',
+    'string.alphanum': '{#label} 只能包含字母和数字',
+    'string.min': '{#label} 长度不能少于 {#limit} 个字符',
+    'string.max': '{#label} 长度不能超过 {#limit} 个字符',
+    'string.pattern.base': '{#label} 格式不正确',
+    'any.required': '{#label} 为必填项',
+    'any.invalid': '{{#label}}不能与旧密码相同',
+    'any.only': '{{#label}}不能与旧密码相同',
+    'any.not': '{{#label}}不能与旧密码相同',
+    'any.notRef': '{{#label}}不能与旧密码相同',
+    'any.unknown': '{{#label}}无效',
+}
 // 用户名的验证规则
-const account = joi.string().alphanum().min(6).max(16).required()
+const account = joi.string().alphanum().min(6).max(16).required().label('账号')
+    .messages(commonMessages)
 
 // 密码的验证规则   6~12位  [\S]表示，非空白就匹配  [\s] 只要出现空白就匹配
 // /^[a-z0-9_-]{6,16}$/ = 以非空白的元素开头和结尾数量6-16
 const password = joi
-	.string()
-	.pattern(/^[a-z0-9_-]{6,16}/)
-	.required()
+    .string()
+    .pattern(/^[a-z0-9_-]{6,16}/)
+    .required().label('密码')
+    .messages(commonMessages)
 
 // 登录表单的验证规则对象
 exports.reg_login_schema = {
-	// 表示需要对 req.body 中的数据进行验证
-	body: {
-		account,
-		password,
-	},
+    // 表示需要对 req.body 中的数据进行验证
+    body: {
+        account,
+        password,
+    },
 }
 
 
 
 // 验证规则对象 - 重置密码
 exports.update_password_schema = {
-	body: {
-		oldPwd: password,
-		// 使用 joi.not(joi.ref('oldPwd')).concat(password) 规则，验证 req.body.newPwd 的值
-		// 解读：
-		// 1. joi.ref('oldPwd') 表示 newPwd 的值必须和 oldPwd 的值保持一致
-		// 2. joi.not(joi.ref('oldPwd')) 表示 newPwd 的值不能等于 oldPwd 的值
-		// 3. .concat() 用于合并 joi.not(joi.ref('oldPwd')) 和 password 这两条验证规则
-		newPwd: joi.not(joi.ref('oldPwd')).concat(password),
-	},
+    body: {
+        oldPwd: password.label('旧密码'),
+        // 使用 joi.not(joi.ref('oldPwd')).concat(password) 规则，验证 req.body.newPwd 的值
+        // 解读：
+        // 1. joi.ref('oldPwd') 表示 newPwd 的值必须和 oldPwd 的值保持一致
+        // 2. joi.not(joi.ref('oldPwd')) 表示 newPwd 的值不能等于 oldPwd 的值
+        // 3. .concat() 用于合并 joi.not(joi.ref('oldPwd')) 和 password 这两条验证规则
+        newPwd: joi.not(joi.ref('oldPwd')).concat(password).label('新密码')
+            .messages(commonMessages),
+    },
 }

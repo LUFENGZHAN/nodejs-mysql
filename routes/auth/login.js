@@ -8,12 +8,13 @@ const { reg_login_schema, update_password_schema } = require('../../schema/auth/
 
 // 登录
 router.post('/login', expressjoi(reg_login_schema), userHandler.login)
-
-
+// 注册
+router.post('/register', expressjoi(reg_login_schema), userHandler.register)
 // 更新用户密码
 router.post('/updatepwd', expressjoi(update_password_schema), userHandler.updatePassword)
-
+// 退出登录
 router.post('/logout', userHandler.logout)
+// 获取用户信息
 router.get('/profile', userHandler.profile)
 // 将路由对象共享出去
 module.exports = router

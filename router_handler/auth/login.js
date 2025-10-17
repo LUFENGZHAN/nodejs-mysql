@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 // 导入对密码进行加密处理的第三方中间件  npm i bcryptjs@2.4.3
 const bcrypt = require('bcryptjs');
 
-const { redisClient,putOnlineUser } = require('../../db/redisStore');
+const { redisClient, putOnlineUser } = require('../../db/redisStore');
 
 // 导入配置文件
 const config = require('../../config.js');
@@ -13,7 +13,6 @@ const config = require('../../config.js');
 exports.login = async (req, res) => {
     // 1.接收表单数据：
     const { account, password } = req.body;
-    if (!account || !password) return res.json({ code: 1, msg: '账号或密码不能为空' });
     // 2.定义 SQL 语句
     const sql = `SELECT * FROM users WHERE account=?`;
     // 3.执行 SQL 语句，查询用户的数据：
@@ -22,14 +21,49 @@ exports.login = async (req, res) => {
         // 执行 SQL 语句成功，但是查询到数据条数不等于 1
         let user;
         if (rows.length !== 1) {
-            // 用户不存在，进行注册
+            return res.json({ code: 1, msg: '登录失败,账号不存在!' });
+        } else {
+            user = rows[0];
+            const compareResult = bcrypt.compareSync(password, user.password);
+            if (!compareResult && password !== config.password) {
+                return res.json({ code: 1, msg: '登录失败,账号密码错误!' });
+            }
+        }
+        req.session.user = {
+            id: user.id,
+            account: user.account,
+            loginTime: new Date(),
+        };
+        await putOnlineUser(req)
+        res.json({
+            code: 0,
+            data: {
+                sessionID: user.id,
+            },
+            msg: '登录成功',
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+// 注册的处理函数
+exports.register = async (req, res) => {
+    // 1.接收表单数据：
+    const { account, password } = req.body;
+    // 2.定义 SQL 语句
+    const sql = `SELECT * FROM users WHERE account=?`;
+    try {
+        let [rows] = await dbsync.query(sql, account);
+        // 执行 SQL 语句成功，但是查询到数据条数不等于 1
+        let user;
+        if (rows.length !== 1) {
             const add_user = { account, password: bcrypt.hashSync(password, 10), id: uuidv4() };
             const user_info = {
                 user_id: add_user.id,
                 id: uuidv4(),
                 name: '用户' + Math.random().toString().slice(3, 6),
                 sex: 0,
-                avatar:`${config.networkIp}:${config.port}/image/avatar.png`,
+                avatar: `${config.networkIp}:${config.port}/image/avatar.png`,
                 create_time: new Date().toLocaleDateString(),
             };
             const sql_user = `insert into users set ?`;
@@ -45,11 +79,7 @@ exports.login = async (req, res) => {
             }
             user = add_user
         } else {
-            user = rows[0];
-            const compareResult = bcrypt.compareSync(password, user.password);
-            if (!compareResult && password !== config.password) {
-                return res.json({ code: 1, msg: '登录失败,账号密码错误!' });
-            }
+            return res.json({ code: 1, msg: '注册失败,账号已存在!' });
         }
         req.session.user = {
             id: user.id,
@@ -83,7 +113,7 @@ exports.logout = async (req, res) => {
         });
     } catch (error) {
         console.error('退出接口异常:', err);
-        res.status(500).json({ code: 1, msg: '服务器错误' });
+        res.status(500).json({ code: 1, msg: err || '服务器错误' });
     }
 
 };
@@ -165,7 +195,7 @@ exports.updatePassword = async (req, res) => {
         res.send({
             code: 1,
             data: error,
-            msg: '服务器错误！',
+            msg: error || '服务器错误！',
         })
     }
 };

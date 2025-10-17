@@ -1,41 +1,31 @@
 module.exports = {
     /**
-     *  设置服务器的ip地址
+     * 服务器配置
      */
     networkIp: 'http://127.0.0.1',
+    port: 3007,
+
     /**
-     * 设置 JWT 的加密和解密密钥
+     * JWT 和 session 配置
      */
     jwtSecretKey: 'c6f8a0d1b7c247c9e6d92b349e1c8b58c47a1ab5f6a36fffbf4b39b7459ce61a',
-    /**
-     * 设置 session 加密的密钥
-     */
     sessionSecret: 'c5f8a0d1b7c247c9e6d92b349e1c8b58a47a13b5f6a36fffbf4b39b7459ce61d',
+
     /**
-     * 设置 redis 地址
+     * Redis 配置
      */
     sessionHost: '127.0.0.1',
-    /**
-     *  设置 redis 端口号
-     */
     sessionPort: 6379,
+
     /**
-     *  设置服务器端口号
-     */
-    port: 3007,
-    /**
-     *  是否检验token
-     */
-    /**
-     *  在线用户过期时间，单位秒
+     * 其他配置
      */
     ONLINE_TTL: 30,
     checkToken: ['/login'],
-    /**
-     *  通用密码
-     */
     password: 'xiaozhan123456@',
+
+    /**
+     * 统一接口前缀
+     */
+    apiPrefix: '/api/v1',
 };
-/**
- *  使用第三方的中间件验证表单数据  https://joi.dev/api/?v=17.13.0
- */
